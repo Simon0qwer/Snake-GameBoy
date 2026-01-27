@@ -6,24 +6,22 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "snake_sprite.h"
-#include "coin_sprite.h"
+#include "assets/snake_sprite.h"
+#include "assets/coin_sprite.h"
 
-#include "snake_game_tiles.h"
-#include "snake_game_map.h"
+#include "assets/snake_game_tiles.h"
+#include "assets/snake_game_map.h"
 
 // Map size = GameBoy screen
 // 160px x 144px or 20 tiles x 18 tiles
-#define mapWidth 20
-#define mapHeight 18
+// #define mapWidth 20
+// #define mapHeight 18
 
-// Borders
-#define BORDER_LEFT   16
+#define BORDER_LEFT   160
 #define BORDER_RIGHT  152
 #define BORDER_TOP    24
 #define BORDER_BOTTOM 120
 
-// Directions
 #define DIR_NONE  0
 #define DIR_RIGHT 1
 #define DIR_LEFT  2
@@ -32,9 +30,8 @@
 
 #define MOVE_DELAY 30
 uint8_t dir = DIR_NONE;
-uint8_t joy; // Joypad declaration for input
+uint8_t joy;
 
-// Sprite coordinates
 uint8_t snake_x = 80;
 uint8_t snake_y = 72;
 uint8_t next_snake_x = 0;
@@ -46,7 +43,6 @@ uint8_t coin_y = 55;
 uint8_t move_timer = 0;
 
 bool is_running = 0;
-
 
 uint8_t r,seed,key;
 
@@ -120,26 +116,23 @@ uint8_t get_random_between(uint8_t min, uint8_t max) {
 
 
 void spawn_coin(){
-    // x coordinate random from 1 to 18 * tile width  1+19-1
-    // y coordinate random from 1 to 16 * tile height 2+17-1
     uint8_t tile_x = get_random_between(3, 19);
     uint8_t tile_y = get_random_between(4, 15);
 
-    move_sprite(1, tile_x * 8, tile_y * 8);
+    move_sprite(1, tile_x * 8, tile_y * 8); // setting coin spawning point
 }
 
 void main() {
     
-
     SPRITES_8x8;
 
-    set_sprite_data(0, 1, snake_sprite);
+    set_sprite_data(0, 1, snake_sprite); 
     set_sprite_tile(0, 0);
 
-    set_sprite_data(1, 1, coin_sprite); // coin 
+    set_sprite_data(1, 1, coin_sprite); 
     set_sprite_tile(1, 1);
 
-    move_sprite(0, snake_x, snake_y);
+    move_sprite(0, snake_x, snake_y); // setting snake spawning point
 
     set_bkg_data(0, 8, snake_game_tiles);
     set_bkg_tiles(0, 0, 20, 18, snake_game_map);

@@ -5,10 +5,11 @@
 # If you move this project you can change the directory 
 # to match your GBDK root directory (ex: GBDK_HOME = "C:/GBDK/"
 ifndef GBDK_HOME
-	GBDK_HOME = "C:/gbdk/"
+	GBDK_HOME = C:/gbdk
 endif
 
-LCC = $(GBDK_HOME)/bin/lcc 
+LCC = $(GBDK_HOME)/bin/lcc
+LCCFLAGS += -Iassets
 
 # GBDK_DEBUG = ON
 ifdef GBDK_DEBUG
@@ -17,10 +18,10 @@ endif
 
 
 # You can set the name of the .gb ROM file here
-PROJECTNAME    = SnakeGame
+PROJECTNAME    = Snake
 
 BINS	    = $(PROJECTNAME).gb
-CSOURCES   := $(wildcard *.c)
+CSOURCES   := $(wildcard *.c) $(wildcard assets/*.c)
 ASMSOURCES := $(wildcard *.s)
 
 all:	$(BINS)
@@ -35,4 +36,3 @@ $(BINS):	$(CSOURCES) $(ASMSOURCES)
 
 clean:
 	rm -f *.o *.lst *.map *.gb *.ihx *.sym *.cdb *.adb *.asm *.noi *.rst
-
