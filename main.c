@@ -15,7 +15,7 @@
 // Map size = GameBoy screen
 // 160px x 144px or 20 tiles x 18 tiles
 // #define mapWidth 20
-// #define mapHeight 18
+// #define mapHeight 18 
 
 #define BORDER_LEFT   160
 #define BORDER_RIGHT  152
