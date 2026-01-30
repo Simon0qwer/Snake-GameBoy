@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "assets/snake_sprite.h"
+#include "assets/snake_head.h"
 #include "assets/coin_sprite.h"
 
 #include "assets/snake_game_tiles.h"
@@ -17,7 +17,7 @@
 // #define mapWidth 20
 // #define mapHeight 18
 
-#define BORDER_LEFT   160
+#define BORDER_LEFT   16
 #define BORDER_RIGHT  152
 #define BORDER_TOP    24
 #define BORDER_BOTTOM 120
@@ -51,16 +51,25 @@ void input_handler() {
     
     // & - bitwise AND operation && - logical AND operation
     if ((joy & J_RIGHT) && dir != DIR_LEFT) {
-        dir = DIR_RIGHT;
+        dir = DIR_RIGHT;    
+        set_sprite_tile(0, 1);
+        set_sprite_prop(0, S_FLIPX);
     }
     if ((joy & J_LEFT) && dir != DIR_RIGHT) {
         dir = DIR_LEFT;
+        set_sprite_tile(0, 1);
+        set_sprite_prop(0, 0);
     }
     if ((joy & J_UP) && dir != DIR_DOWN) {
         dir = DIR_UP;
+        set_sprite_tile(0, 0);
+        set_sprite_prop(0, S_FLIPY);
     }
     if ((joy & J_DOWN) && dir != DIR_UP) {
         dir = DIR_DOWN;
+        set_sprite_tile(0, 0);
+        set_sprite_prop(0, 0);
+            
     }
 
 }
@@ -76,10 +85,14 @@ void snake_move() {
     next_snake_y = snake_y;
 
     switch(dir) {
-        case DIR_RIGHT: next_snake_x += 8; break;
-        case DIR_LEFT:  next_snake_x -= 8; break;
-        case DIR_UP:    next_snake_y -= 8; break;
-        case DIR_DOWN:  next_snake_y += 8; break;
+        case DIR_RIGHT: next_snake_x += 8; 
+        break;
+        case DIR_LEFT:  next_snake_x -= 8; 
+        break;                
+        case DIR_UP:    next_snake_y -= 8;
+        break;
+        case DIR_DOWN:  next_snake_y += 8; 
+        break;
         default: return;
     }
 
@@ -126,11 +139,14 @@ void main() {
     
     SPRITES_8x8;
 
-    set_sprite_data(0, 1, snake_sprite); 
-    set_sprite_tile(0, 0);
+    set_sprite_data(0, 2, snake_head); 
 
-    set_sprite_data(1, 1, coin_sprite); 
-    set_sprite_tile(1, 1);
+    set_sprite_data(2, 1, coin_sprite); 
+    // 2 = index of first tile for coin sprite 
+    // 1 = number of tiles for coin sprite
+    set_sprite_tile(1, 2);
+    // 1 = sprite number for coin
+    // 2 = tile index for coin sprite
 
     move_sprite(0, snake_x, snake_y); // setting snake spawning point
 
@@ -159,4 +175,3 @@ void main() {
         }
     }
 }
-
