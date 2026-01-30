@@ -1,8 +1,8 @@
 /*
 
- EXPORT.C
+ SNAKE_HEAD.H
 
- Tile Source File.
+ Include File.
 
  Info:
   Form                 : All tiles as one unit.
@@ -10,7 +10,7 @@
   Compression          : None.
   Counter              : None.
   Tile size            : 8 x 8
-  Tiles                : 0 to 0
+  Tiles                : 0 to 1
 
   Palette colors       : None.
   SGB Palette          : None.
@@ -22,11 +22,10 @@
 
 */
 
-/* Start of tile array. */
-unsigned char snake_sprite[] =
-{
-  0xFF,0x00,0x99,0x66,0xBD,0x66,0xE7,0x18,
-  0xDB,0x3C,0xFF,0x3C,0xDB,0x24,0xFF,0x00
-};
 
-/* End of EXPORT.C */
+/* Bank of tiles. */
+#define snake_headBank 0
+/* Start of tile array. */
+extern unsigned char snake_head[];
+
+/* End of SNAKE_HEAD.H */
