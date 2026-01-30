@@ -1,4 +1,6 @@
 #include <gb/gb.h>
+#include <gbdk/font.h>
+
 #include <stdint.h>
 #include <stdio.h> 
 #include <stdbool.h>
@@ -11,6 +13,8 @@
 
 #include "assets/snake_game_tiles.h"
 #include "assets/snake_game_map.h"
+
+#include "assets/window_map.h"
 
 // Map size = GameBoy screen
 // 160px x 144px or 20 tiles x 18 tiles
@@ -150,13 +154,22 @@ void main() {
 
     move_sprite(0, snake_x, snake_y); // setting snake spawning point
 
-    set_bkg_data(0, 8, snake_game_tiles);
+    font_t min_font; 
+    font_init();
+    min_font = font_load(font_min); //36 tiles for font
+    font_set(min_font);
+
+    set_bkg_data(37, 8, snake_game_tiles);
     set_bkg_tiles(0, 0, 20, 18, snake_game_map);
+
+    set_win_tiles(0, 0, 5, 1, window_map);
+    move_win(15, 128); 
 
     is_running = 1;
 
     SHOW_SPRITES;
     SHOW_BKG;
+    SHOW_WIN;
     DISPLAY_ON;
 
     init_random();
