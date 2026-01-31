@@ -7,14 +7,13 @@
 #include <rand.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #include "assets/snake_head.h"
 #include "assets/coin_sprite.h"
 
 #include "assets/snake_game_tiles.h"
 #include "assets/snake_game_map.h"
-
-#include "assets/window_map.h"
 
 // Map size = GameBoy screen
 // 160px x 144px or 20 tiles x 18 tiles
@@ -78,10 +77,37 @@ void input_handler() {
 
 }
 
+void draw_text_on_window(uint8_t x, uint8_t y, const char *text) {
+    uint8_t len = strlen(text); // Get length of the text
+    uint8_t tiles[20]; // Fixed size of text 
+    for (uint8_t i = 0; i < len && i < 20; i++) {
+        char c = text[i];
+        if (c == ' ') {
+            tiles[i] = 0x00;
+        } else if (c >= '0' && c <= '9') {
+            tiles[i] = c - '0' + 0x01;
+        } else if (c >= 'A' && c <= 'Z') {
+            tiles[i] = c - 'A' + 0x0B;
+        } else if (c >= 'a' && c <= 'z') {
+            tiles[i] = c - 'a' + 0x0B; // Lowercase handling
+        } else {
+            tiles[i] = 0x00; // Default for other chars
+        }
+    }
+    set_win_tiles(x, y, len, 1, tiles);
+}
+
+void clear_window() {
+    uint8_t blank[360] = {0}; // 20 * 18 = 360 tiles
+    set_win_tiles(0, 0, 20, 18, blank);
+}
+
 void game_over(){
     is_running = 0;
     HIDE_SPRITES;
-    printf("\n\n\n\n\n\n\n\n\n === GAME OVER ===");
+    clear_window();
+    move_win(0, 0);
+    draw_text_on_window(6, 8, "GAME OVER");
 }
 
 void snake_move() {
@@ -162,8 +188,9 @@ void main() {
     set_bkg_data(37, 8, snake_game_tiles);
     set_bkg_tiles(0, 0, 20, 18, snake_game_map);
 
-    set_win_tiles(0, 0, 5, 1, window_map);
     move_win(15, 128); 
+
+    draw_text_on_window(0, 0, "SCORE 000");
 
     is_running = 1;
 
