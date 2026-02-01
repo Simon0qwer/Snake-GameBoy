@@ -9,7 +9,7 @@
 #include <time.h>
 #include <string.h>
 
-#include "assets/snake_head.h"
+#include "assets/snake_sprite.h"
 #include "assets/coin_sprite.h"
 
 #include "assets/snake_game_tiles.h"
@@ -40,8 +40,10 @@ uint8_t snake_y = 72;
 uint8_t next_snake_x = 0;
 uint8_t next_snake_y = 0;
 
-uint8_t coin_x = 55;
-uint8_t coin_y = 55;
+uint8_t coin_x = 0;
+uint8_t coin_y = 0;
+
+uint16_t score = 0;
 
 uint8_t move_timer = 0;
 
@@ -102,6 +104,13 @@ void clear_window() {
     set_win_tiles(0, 0, 20, 18, blank);
 }
 
+void draw_score() {
+    clear_window();
+    char score_text[20];
+    sprintf(score_text, "SCORE %d", score);
+    draw_text_on_window(0, 0, score_text);
+}
+
 void game_over(){
     is_running = 0;
     HIDE_SPRITES;
@@ -138,12 +147,19 @@ void snake_move() {
         snake_x = next_snake_x;
         snake_y = next_snake_y;
         move_sprite(0, snake_x, snake_y);
+
+        // Check for coin collision
+        if (snake_x == coin_x && snake_y == coin_y) {
+            score += 10;
+            spawn_coin();
+            // Update score display
+            draw_score();
+        }
     }
 
-}
+}   
 
 void init_random() {
-
     seed=0;
     key=0;
     r=0;
@@ -152,26 +168,26 @@ void init_random() {
     initrand(seed);                    
 }
 
-
 uint8_t get_random_between(uint8_t min, uint8_t max) {
     return (uint8_t)(rand() % (max - min + 1)) + min;
 }
-
 
 void spawn_coin(){
     uint8_t tile_x = get_random_between(3, 19);
     uint8_t tile_y = get_random_between(4, 15);
 
-    move_sprite(1, tile_x * 8, tile_y * 8); // setting coin spawning point
+    coin_x = tile_x * 8;
+    coin_y = tile_y * 8;
+    move_sprite(1, coin_x, coin_y); // setting coin spawning point
 }
 
 void main() {
-    
+
     SPRITES_8x8;
 
-    set_sprite_data(0, 2, snake_head); 
+    set_sprite_data(0, 2, snake_sprite);
 
-    set_sprite_data(2, 1, coin_sprite); 
+    set_sprite_data(2, 1, coin_sprite);
     // 2 = index of first tile for coin sprite 
     // 1 = number of tiles for coin sprite
     set_sprite_tile(1, 2);
@@ -190,7 +206,7 @@ void main() {
 
     move_win(15, 128); 
 
-    draw_text_on_window(0, 0, "SCORE 000");
+    draw_score();
 
     is_running = 1;
 
